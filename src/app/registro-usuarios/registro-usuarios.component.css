@@ -1,0 +1,33 @@
+.container {
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.form-box {
+  width: 500px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.form-group label {
+  float: left;
+  margin-right: 10px;
+}

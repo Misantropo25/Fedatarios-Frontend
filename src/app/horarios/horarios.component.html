@@ -1,0 +1,25 @@
+<div id="calendar"></div>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+  <div>
+    <button type="button" class="btn btn-primary" (click)="agregarEvento(nuevaFecha)">Agregar evento</button>
+  </div>
+  <div>
+    <input
+      [(ngModel)]="nuevaFecha"
+      type="date"
+      class="form-control"
+    >
+  </div>
+  <!-- Modal para agregar un evento -->
+<form #eventoForm="ngForm">
+  <div class="modal-body">
+    <input type="text" class="form-control" [(ngModel)]="nombreEvento" placeholder="Nombre del Evento" name="nombreEvento">
+  </div>
+</form>
+  <div>
+    <button class="btn btn-danger" (click)="borrarEvento()">Borrar Evento Seleccionado</button>
+  </div>
+</div>
+
+

@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-left">
+      <h3>DOCUMENTOS A FEDATAR</h3>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <div>
+          <label class="fecha">Fecha</label>
+          <label>{{ fecha }}</label>
+        </div>
+        <DIV class="d-flex justify-content-center">
+          <input type="text" class="form-control" placeholder="Buscar por DNI"><button class="btn btn-success" id="aumentar"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </DIV>
+      </div>
+      <table class="table table-striped" id="tabla">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tipo Documento</th>
+            <th scope="col">Archivo</th>
+            <th scope="col">Visualizar</th>
+            <th scope="col">Observar</th>
+            <th scope="col">Firmar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              1
+            </td>
+            <td>
+              Resolucion
+            </td>
+            <td>
+              Resolucion.pdf
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" (click)="visualizar()">
+                <i class="fa-solid fa-binoculars"></i>
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#observaciones" data-whatever="@mdo">
+                <i class="fa-solid fa-bomb"></i>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-success"><i class="fa-solid fa-signature"></i>Firmar</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              2
+            </td>
+            <td>
+              Certificado
+            </td>
+            <td>
+              Certificado.pdf
+            </td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" (click)="visualizar()">
+                <i class="fa-solid fa-binoculars"></i>
+              </button>
+            </td>
+            <td>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#observaciones" data-whatever="@mdo" >
+              <i class="fa-solid fa-bomb"></i>
+            </button>
+            <td>
+              <button class="btn btn-success"><i class="fa-solid fa-signature"></i>Firmar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
+
+
+<!-- Modal de mierda -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img #imagen class="img" >
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Model para las observaciones -->
+<div class="modal fade" id="observaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registro de Documentos Observados</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Seleccione el tipo de Observacion</option>
+            <option value="1">Imagen no corresponde</option>
+            <option value="2">Documento escaneado no es original</option>
+            <option value="3">El documento escaneado presenta sombras</option>
+          </select>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary">Registrar Observaciones</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
