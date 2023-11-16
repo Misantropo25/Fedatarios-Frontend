@@ -1,0 +1,1 @@
+Modelos de datos o interfaces TypeScript que representan las estructuras de datos utilizadas en toda la aplicación.

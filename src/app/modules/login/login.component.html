@@ -1,0 +1,120 @@
+<div class="login-container d-flex align-items-center justify-content-center">
+  <div class="login-form text-center">
+    <h3 class="mb-4">Gobierno Regional del Cusco Fedatarios</h3>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group mb-3">
+        <div class="input-group">
+          <div class="form-group mb-3">
+            <div class="input-group">
+              <span class="input-group-text icon-container"
+                ><i class="fas fa-person"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                placeholder="Usuario..."
+                required
+                [(ngModel)]="user.username"
+                name="username"
+              />
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <div class="input-group">
+              <span class="input-group-text icon-container"
+                ><i class="fas fa-lock"></i
+              ></span>
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control"
+                id="password"
+                placeholder="Contraseña..."
+                required
+                [(ngModel)]="user.password"
+                name="password"
+              />
+              <span class="input-group-text icon-container" (click)="toggleShowPassword()"
+                ><i
+                  [class]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                ></i
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group form-check mb-4">
+        <input type="checkbox" class="form-check-input" id="remember" />
+        <label class="form-check-label" for="remember">Recordarme</label>
+        <button
+          type="submit"
+          routerLink="/dashboard/perfil"
+          class="btn btn-block login-btn"
+        >
+          Iniciar Sesión
+        </button>
+      
+      <a href="#" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+    </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg">
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password">
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="remember">
+              <label class="form-check-label" for="remember">Recordarme</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- <div>
+
+  <div class="card card-outline card-primary">
+      <div class="card-header text-center">
+          <h2 class="h2">Gobierno Regional del Cusco - Fedatarios</h2>
+      </div>
+      <div class="card-body">
+          <p class="login-box-msg">Inicio de Sesión</p>
+
+          <form action="../../index3.html" method="post">
+              <div class="input-group mb-3">
+                  <input type="email" class="form-control" placeholder="Usuario" aria-label="Usuario">
+                  <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  </div>
+              </div>
+              <div class="input-group mb-3">
+                  <input type="password" class="form-control" placeholder="Contraseña" aria-label="Contraseña">
+                  <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                  </div>
+              </div>
+              <div class="form-group mb-3">
+                  <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="remember">
+                      <label class="custom-control-label" for="remember">Recordarme</label>
+                  </div>
+              </div>
+              <button type="submit" routerLink="/dashboard/perfil" class="btn btn-primary btn-block">Iniciar Sesión</button>
+          </form>
+      </div>
+  </div>
+</div> -->

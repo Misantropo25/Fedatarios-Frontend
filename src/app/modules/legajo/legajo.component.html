@@ -1,0 +1,208 @@
+<div class="container">
+  <div class="card card-outline card-primary">
+    <button
+      type="button"
+      class="btn btn-primary"
+      *ngIf="mostrarBotonTerminos"
+      data-toggle="modal"
+      data-target="#exampleModal"
+      data-whatever="@mdo"
+    >
+      <i class="fa-solid fa-scale-balanced"></i>Terminos y Condiciones
+    </button>
+
+    <div *ngIf="bandera === true">
+      <div class="card-header text-left">
+        <h3>LEGAJO</h3>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <label class="fecha">Fecha</label>
+            <label>{{ fecha }}</label>
+          </div>
+          <div>
+            <button
+              class="btn btn-success"
+              id="aumentar"
+              (click)="agregarFila()"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <table class="table table-success table-striped" id="tabla">
+          <thead>
+            <tr>
+              <th scope="col">Tipo Documento</th>
+              <th scope="col">Archivo</th>
+            </tr>
+          </thead>
+          <tbody #cuerpo>
+            <tr *ngFor="let documento of documentos; let i = index">
+              <td>
+                <select
+                  class="form-control form-select-sm"
+                  aria-label="Small select example"
+                  [(ngModel)]="documento.tipoDocumento"
+                >
+                  <option value="1">Resolucion</option>
+                  <option value="2">Titulo</option>
+                  <option value="3">Diplomas</option>
+                  <option value="4">Maestria</option>
+                </select>
+              </td>
+              <td>
+                <div class="d-flex justify-content-between">
+                  <input
+                    class="form-control file"
+                    type="file"
+                    (change)="onFileChange($event, i)"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-warning"
+                    (click)="eliminarFila(i)"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Agregar URL"
+                  class="form-control"
+                  [(ngModel)]="documento.url"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div>
+          <p></p>
+          <label>Fedatario responsable: No seleccionado</label>
+          <p></p>
+          <label>Horario Seleccionado: No seleccionado</label>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div>
+            <label>Subir documentos</label>
+          </div>
+          <div>
+            <button
+              class="btn btn-success"
+            >
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Horario de los fedatarios -->
+    <div class="container">
+      <div class="card-header text-left">
+        <h3 *ngIf="bandera === true">HORARIO DE LOS FEDATARIOS</h3>
+      </div>
+      <div id="calendar"></div>
+      <div
+        *ngIf="bandera === true"
+        class="d-flex justify-content-between align-items-center mt-3"
+      >
+        <div>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="agregarEvento(nuevaFecha)"
+          >
+            Agregar evento
+          </button>
+        </div>
+        <div>
+          <input [(ngModel)]="nuevaFecha" type="date" class="form-control" />
+        </div>
+        <!-- Modal para agregar un evento -->
+        <form #eventoForm="ngForm">
+          <div class="modal-body">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="nombreEvento"
+              placeholder="Nombre del Evento"
+              name="nombreEvento"
+            />
+          </div>
+        </form>
+        <div>
+          <button class="btn btn-danger" (click)="borrarEvento()">
+            Borrar Evento Seleccionado
+          </button>
+        </div>
+      </div>
+      <p></p>
+    </div>
+    <!-- Fin de horario de los fedatarios -->
+
+    <!-- Modal  -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <p>
+                Los documentos legales son aquellos archivos que establecen
+                derechos y obligaciones para las partes involucradas, y sirven
+                para regular y gestionar situaciones de carácter legal, tanto
+                personales como empresariales. En el contexto de las empresas,
+                los documentos legales regulan las relaciones entre la
+                organización y sus trabajadores, clientes, proveedores,
+                accionistas, entre otros. Estos documentos pueden incluir
+                contratos de trabajo, acuerdos comerciales, políticas de
+                privacidad, estatutos de la empresa, entre otros. Su objetivo es
+                establecer derechos y obligaciones claras y específicas en una
+                transacción o situación jurídica determinada, proteger los
+                intereses de la empresa y garantizar la conformidad con las
+                leyes y regulaciones aplicables
+              </p>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="validar(1, 1)"
+              data-dismiss="modal"
+              ng-hide=""
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

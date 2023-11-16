@@ -1,0 +1,32 @@
+.perfil-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  
+  .foto-container {
+    flex: 0 0 auto; /* La foto no crecerá ni se encogerá, manteniendo su tamaño original */
+    margin-right: 20px; /* Ajusta el margen entre la foto y la información */
+  }
+  
+  .foto-container img {
+    width: 200px; /* Ajusta el ancho de la foto según tus preferencias */
+    height: auto; /* Mantiene la proporción original de la imagen */
+  }
+  
+  .informacion-container {
+    flex: 0 0 50%; /* La información ocupará el 50% del espacio disponible */
+}
+  
+  .informacion-container h2 {
+    font-size: 1.5em; /* Ajusta el tamaño del título según tus preferencias */
+  }
+  
+  .informacion-container ul {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0; /* Elimina el relleno predeterminado de la lista */
+  }
+  
+  .informacion-container li {
+    margin-bottom: 10px; /* Ajusta el espacio entre los elementos de la lista */
+  }

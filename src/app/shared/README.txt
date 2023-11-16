@@ -1,0 +1,1 @@
+Módulos, componentes, directivas y pipes reutilizables que pueden ser importados por varios módulos de características.

@@ -15,10 +15,29 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');
+
   }
 
   acceder(){
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/dashboard/perfil']);
+    
   }
 
+  user = {
+    username: '',
+    password: ''
+  };
+
+  showPassword: boolean = false;
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  onSubmit() {
+    // Procesar inicio de sesión
+    console.log(this.user);
+  }
+
+  
 }
