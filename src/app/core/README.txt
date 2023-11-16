@@ -1,0 +1,1 @@
+Servicios esenciales que se cargan una sola vez y componentes singleton, directivas y pipes.
