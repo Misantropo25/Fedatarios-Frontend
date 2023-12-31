@@ -1,0 +1,10 @@
+/* Estilos adicionales para los botones y formularios */
+button.btn {
+    min-width: 100px; /* Asegura un ancho mínimo para los botones */
+  }
+  
+  .form-control {
+    margin-bottom: 10px; /* Espacio entre los campos del formulario */
+  }
+
+  

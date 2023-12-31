@@ -1,13 +1,15 @@
 <div class="login-container d-flex align-items-center justify-content-center">
   <div class="login-form text-center">
     <h3 class="mb-4">Gobierno Regional del Cusco Fedatarios</h3>
+    <app-modal [message]="message" [showModal]="showModal"></app-modal>
+    <div class="loading" *ngIf="loading">Iniciando sesión...</div>
     <form (ngSubmit)="onSubmit()">
       <div class="form-group mb-3">
         <div class="input-group">
           <div class="form-group mb-3">
             <div class="input-group">
               <span class="input-group-text icon-container"
-                ><i class="fas fa-person"></i
+                ><i class="fa-solid fa-user"></i
               ></span>
               <input
                 type="text"
@@ -15,7 +17,7 @@
                 id="username"
                 placeholder="Usuario..."
                 required
-                [(ngModel)]="user.username"
+                [(ngModel)]="credentials.dni"
                 name="username"
               />
             </div>
@@ -31,31 +33,29 @@
                 id="password"
                 placeholder="Contraseña..."
                 required
-                [(ngModel)]="user.password"
+                [(ngModel)]="credentials.password"
                 name="password"
               />
-              <span class="input-group-text icon-container" (click)="toggleShowPassword()"
-                ><i
-                  [class]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"
-                ></i
+              <span
+                class="input-group-text icon-container"
+                (click)="toggleShowPassword()"
+                ><i [class]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i
               ></span>
             </div>
+          </div>
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
           </div>
         </div>
       </div>
       <div class="form-group form-check mb-4">
         <input type="checkbox" class="form-check-input" id="remember" />
         <label class="form-check-label" for="remember">Recordarme</label>
-        <button
-          type="submit"
-          routerLink="/dashboard/perfil"
-          class="btn btn-block login-btn"
-        >
+        <button type="submit" class="btn btn-block login-btn">
           Iniciar Sesión
         </button>
-      
-      <a href="#" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
-    </div>
+        <a href="#" class="forgot-password-link">¿Olvidaste tu contraseña?</a>
+      </div>
     </form>
   </div>
 </div>

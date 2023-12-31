@@ -1,18 +1,34 @@
-<div class="perfil-container">
-    <!-- Sección de la foto del usuario -->
+<div class="card card-outline card-primary">
+  <div class="card-header">
+    <h3>Perfil del usuario</h3>
+  </div>
+  <div class="perfil-container" *ngIf="usuario">
     <div class="foto-container">
-      <img src="../../../assets/imagenes/personal-image/user.jpg" alt="Foto del Usuario" />
+      <img [src]="fotoUrl" alt="Foto del usuario" class="foto-usuario"/>
     </div>
-  
-    <!-- Sección de la información del usuario -->
+
     <div class="informacion-container">
       <h2>Información del Usuario</h2>
-      <ul>
-        <li><strong>DNI:</strong> {{ dniUsuario }}</li>
-        <li><strong>Teléfono:</strong> {{ telefonoUsuario }}</li>
-        <li><strong>Nombre:</strong> {{ nombreUsuario }} {{ apellidoPaternoUsuario }} {{ apellidoMaternoUsuario }}</li>
-        <li><strong>Correo Electrónico:</strong> {{ correoUsuario }}</li>
-        <li><strong>Rol del Usuario:</strong> {{ rolUsuario }}</li>
-      </ul>
+      <div class="info-card">
+        <span><strong>DNI:</strong> {{ usuario.dni! }}</span>
+      </div>
+      <div class="info-card">
+        <span><strong>Teléfono:</strong> {{ usuario.telefono! }}</span>
+      </div>
+      <div class="info-card">
+        <span
+          ><strong>Nombre:</strong> {{ usuario.nombre! }}
+          {{ usuario.apePaterno! }} {{ usuario.apeMaterno! }}</span
+        >
+      </div>
+      <div class="info-card">
+        <span><strong>Correo Electrónico:</strong> {{ usuario.email! }}</span>
+      </div>
+      <div class="info-card">
+        <span
+          ><strong>Rol del Usuario:</strong> {{ usuario.descripcionRol! }}</span
+        >
+      </div>
     </div>
   </div>
+</div>

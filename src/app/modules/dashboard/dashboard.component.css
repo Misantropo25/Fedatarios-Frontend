@@ -1,0 +1,49 @@
+.logout-button {
+    background-color: red; /* Fondo rojo */
+    color: white; /* Texto en blanco */
+    border: 2px solid red; /* Borde rojo */
+    padding: 5px 10px; /* Algo de padding para que se vea bien */
+    border-radius: 5px; /* Bordes redondeados (opcional) */
+    text-decoration: none; /* Elimina el subrayado del texto */
+  }
+  
+  .logout-button:hover {
+    background-color: darkred; /* Fondo más oscuro al pasar el mouse */
+    border-color: darkred; /* Borde más oscuro al pasar el mouse */
+  }
+
+  .brand-link .brand-text {
+    margin-left: 10px; /* Ajusta el espacio entre el logo y el texto */
+    font-size: 16px; /* Ajusta el tamaño del texto si es necesario */
+  }
+  
+  /* Ajustes adicionales para responsividad y diseño */
+  @media (max-width: 768px) {
+    .brand-link .brand-text {
+      display: none; /* Oculta el texto en pantallas más pequeñas si es necesario */
+    }
+  }
+
+  .custom-search-bar .form-control-sidebar {
+    background-color: #f2f2f2;
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+  }
+  
+  .custom-search-bar .form-control-sidebar:focus {
+    background-color: #e9e9e9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .custom-search-bar .btn-sidebar {
+    border-radius: 0 15px 15px 0;
+  }
+  
+  /* Ajustes adicionales para responsividad */
+  @media (max-width: 768px) {
+    .custom-search-bar {
+      margin-bottom: 10px;
+    }
+  }

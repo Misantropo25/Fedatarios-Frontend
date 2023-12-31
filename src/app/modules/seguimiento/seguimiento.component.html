@@ -1,0 +1,158 @@
+<div class="card card-outline card-primary mb-3">
+  <div class="card-header">
+    <h3>Seguimiento de Legajos</h3>
+  </div>
+  <div class="card-body">
+    <h4>Seleccione un legajo:</h4>
+    <div class="mb-3">
+      <select
+        class="form-control"
+        [(ngModel)]="legajoSeleccionado"
+        (change)="cargarDocumentosPorLegajo()"
+      >
+        <option *ngFor="let legajo of legajos" [ngValue]="legajo.idlegajo">
+          {{ legajo.idlegajo }}
+        </option>
+      </select>
+    </div>
+    <table class="table table-custom">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Nombre de Documento</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let documento of documentos; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ documento.rutaArchivo }}</td>
+          <td>{{ documento.estadoActual }}</td>
+          <td>
+            <!-- Botón para previsualizar -->
+            <button
+              class="btn btn-primary"
+              (click)="previsualizarDocumento(documento)"
+            >
+              <i class="fas fa-eye"></i>
+            </button>
+            <!-- Botón para ver observaciones, visible solo si el documento está en estado 'Observado' -->
+            <button
+              *ngIf="documento.estadoActual === 'Observado'"
+              class="btn btn-info"
+              (click)="verObservaciones(documento)"
+            >
+              <i class="fas fa-comments"></i>
+            </button>
+            <!-- Botón para ver seguimiento -->
+            <button
+              class="btn btn-secondary"
+              (click)="abrirModalSeguimientoConEstados(documento.id)"
+            >
+              <i class="fas fa-history"></i> Seguimiento
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para mostrar el seguimiento -->
+<div #modalSeguimiento class="modal fade modal-custom" id="modalSeguimiento" tabindex="-1" role="dialog" aria-labelledby="modalSeguimientoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalSeguimientoLabel">Seguimiento del Documento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cerrarModalSeguimiento()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="timeline">
+          <div *ngFor="let estado of estadosDocumento" class="timeline-item">
+            <div class="timeline-icon" [ngClass]="{'icono-observado': estado.estado.descripcion === 'Observado', 'icono-subsanado': estado.estado.descripcion === 'Subsanado', 'icono-firmado': estado.estado.descripcion === 'Firmado', 'icono-creado': estado.estado.descripcion === 'Creado'}">
+              <i [class]="obtenerIcono(estado.estado.descripcion)"></i>
+            </div>
+            <div class="timeline-content" [ngClass]="obtenerEstilo(estado.estado.descripcion)">
+              <h5>{{ estado.estado.descripcion }}</h5>
+              <p>Cambio realizado el {{ estado.fechaCambio | date: 'dd/MM/yyyy' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalSeguimiento()" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modales para previsualización y observaciones -->
+<div
+  class="modal fade modal-custom"
+  id="previsualizacionModal"
+  tabindex="-1"
+  aria-labelledby="previsualizacionModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previsualizacionModalLabel">
+          Previsualización del Documento
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="cerrarModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe [src]="documentoUrl" width="100%" height="600px"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Observaciones -->
+<div
+  class="modal fade modal-custom"
+  id="observacionesModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="observacionesModalLabel">
+          Observaciones del Documento
+        </h5>
+        <button
+          type="button"
+          (click)="cerrarModal()"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Lista de Observaciones -->
+        <ul>
+          <h4>{{ "Observacion al documento: " }}</h4>
+          <li *ngFor="let observacion of observacionesDelDocumento">
+            {{ observacion.sugerencias }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

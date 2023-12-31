@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Usuario } from 'src/app/interfaces/usuario.model';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-perfil',
@@ -6,33 +8,31 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
-  dniUsuario: string = '70445736';
-  telefonoUsuario: string = '983000123';
-  nombreUsuario: string = 'Gonzalo Jair';
-  apellidoPaternoUsuario: string = 'Almanza';
-  apellidoMaternoUsuario: string = 'Cuno';
-  correoUsuario: string = 'jair@hotmail.com';
-  rolUsuario: string = 'Usuario';
+  usuario!: Usuario;
+  fotoUrl!: string;
 
-  // constructor(private userService: UserService) { }  // Reemplaza 'UserService' con el nombre real de tu servicio
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
-    // Llama al servicio para obtener la información del usuario
-    // this.userService.obtenerInformacionUsuario().subscribe(
-    //   (usuario) => {
-    //     // Asigna los valores obtenidos del usuario a las variables del componente
-    //     this.dniUsuario = usuario.dni;
-    //     this.telefonoUsuario = usuario.telefono;
-    //     this.nombreUsuario = usuario.nombre;
-    //     this.apellidoPaternoUsuario = usuario.apellidoPaterno;
-    //     this.apellidoMaternoUsuario = usuario.apellidoMaterno;
-    //     this.correoUsuario = usuario.correo;
-    //     this.rolUsuario = usuario.rol;
-    //   },
-    //   (error) => {
-    //     console.error('Error al obtener la información del usuario', error);
-    //     // Puedes manejar el error según tus necesidades
-    //   }
-    // );
+    // Suponiendo que tienes una forma de obtener el ID del usuario actual (por ejemplo, desde el localStorage)
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.cargarPerfilUsuario(+userId);
+    }
+  }
+
+  cargarPerfilUsuario(userId: number): void {
+    this.usuarioService.getUsuario(userId).subscribe((usuario) => {
+      if (usuario) {
+        this.usuario = usuario;
+        this.fotoUrl = usuario.foto
+          ? 'data:image/jpeg;base64,' + usuario.foto
+          : 'assets/img/avatar5.png'; // Ruta de tu imagen por defecto
+        // Realizar acciones con los datos del usuario
+    } else {
+        // Manejar el caso en que el usuario es null
+        this.fotoUrl = 'assets/img/avatar2.png'; // Ruta de tu imagen por defecto
+    }
+    });
   }
 }

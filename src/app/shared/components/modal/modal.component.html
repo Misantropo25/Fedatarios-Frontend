@@ -1,0 +1,8 @@
+<!-- modal.component.html -->
+<div class="modal" [ngClass]="{'show': showModal}">
+    <div class="modal-content">
+      <img  class="close-icon" (click)="closeModal()" alt="Cerrar"/>
+      <p>{{ message }}</p>
+    </div>
+  </div>
+

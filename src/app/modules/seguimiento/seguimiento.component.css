@@ -1,0 +1,102 @@
+.table-custom {
+  background-color: #f8f9fa; /* Un color de fondo más claro y sobrio */
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(15, 15, 15, 0.1);
+}
+
+.table-custom th, .table-custom td {
+  vertical-align: middle;
+}
+
+.table-custom th {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+/* Estilos de botones */
+.btn-custom {
+  margin-right: 10px;
+}
+
+
+/* Estilos generales de modales */
+.modal-custom .modal-content {
+  border-radius: 5px;
+}
+
+.modal-custom .modal-header {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+}
+
+.modal-custom .modal-footer {
+  background-color: #f8f9fa;
+}
+
+/* Estilos de la línea de tiempo */
+.timeline {
+  position: relative;
+  padding: 20px 0;
+  list-style: none;
+}
+
+.timeline:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 40px;
+  width: 2px;
+  background: #e9ecef;
+}
+
+.timeline-item {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.timeline-icon {
+  background: #fff;
+  display: inline-block;
+  position: absolute;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  border: 2px solid #e9ecef;
+}
+
+.timeline-content {
+  margin-left: 80px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 15px;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.05);
+  border-left: 4px solid;
+}
+
+/* Colores específicos para los íconos en el timeline */
+.icono-creado {
+  background-color: #59dfa7; /* Amarillo para íconos observados */
+  border-color: rgb(10, 95, 53);
+}
+
+.icono-observado {
+  background-color: #ffc107; /* Amarillo para íconos observados */
+  border-color: rgb(10, 95, 53);
+}
+
+.icono-subsanado {
+  background-color: #17a2b8; /* Azul claro para íconos subsanados */
+  border-color: rgb(10, 95, 53);
+}
+
+.icono-firmado {
+  background-color: #007bff; /* Azul para íconos firmados */
+  border-color: rgb(10, 95, 53);
+}
+
+

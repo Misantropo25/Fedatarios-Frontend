@@ -1,25 +1,212 @@
-<div id="calendar"></div>
+<div class="card card-outline card-primary mb-3">
+  <div class="card-header">
+    <h3>Creacion de horarios de atencion de fedatarios</h3>
+  </div>
+  <p></p>
+  <!-- Botones de cambio de vista y fecha actual -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <button class="btn btn-outline-secondary me-2" (click)="navigate(-1)">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button class="btn btn-outline-secondary me-2" (click)="navigate(1)">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+      <span class="fw-bold ms-2">{{ formattedDate }}</span>
+    </div>
+    <div>
+      <button
+        class="btn btn-primary me-2"
+        (click)="setView(CalendarView.Month)"
+      >
+        <i class="fas fa-calendar-alt"></i> Vista Mensual
+      </button>
+      <button class="btn btn-secondary" (click)="setView(CalendarView.Day)">
+        <i class="fas fa-calendar-day"></i> Vista Diaria
+      </button>
+    </div>
+  </div>
 
-<div class="d-flex justify-content-between align-items-center mt-3">
-  <div>
-    <button type="button" class="btn btn-primary" (click)="agregarEvento(nuevaFecha)">Agregar evento</button>
+  <!-- Calendario -->
+  <mwl-calendar-month-view
+    *ngIf="view === CalendarView.Month"
+    [viewDate]="viewDate"
+    [events]="events"
+  ></mwl-calendar-month-view>
+  <mwl-calendar-day-view
+    *ngIf="view === CalendarView.Day"
+    [viewDate]="viewDate"
+    [events]="events"
+  ></mwl-calendar-day-view>
+
+  <!-- Botón para añadir horario -->
+  <div class="text-center mt-3">
+    <button class="btn btn-success" (click)="abrirModalCreacion()">
+      Añadir Horario
+    </button>
   </div>
-  <div>
-    <input
-      [(ngModel)]="nuevaFecha"
-      type="date"
-      class="form-control"
+
+  <!-- Modal para Crear Horario -->
+  <ng-template #modalCrearHorario let-modal>
+    <form
+      [formGroup]="crearHorarioForm"
+      (ngSubmit)="onSubmitHorario()"
+      class="p-3"
     >
-  </div>
-  <!-- Modal para agregar un evento -->
-<form #eventoForm="ngForm">
-  <div class="modal-body">
-    <input type="text" class="form-control" [(ngModel)]="nombreEvento" placeholder="Nombre del Evento" name="nombreEvento">
-  </div>
-</form>
-  <div>
-    <button class="btn btn-danger" (click)="borrarEvento()">Borrar Evento Seleccionado</button>
+      <div class="mb-3">
+        <label for="fecha">Fecha</label>
+        <input
+          type="date"
+          id="fecha"
+          class="form-control"
+          formControlName="fecha"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="diaSemana">Día de la Semana</label>
+        <input
+          type="text"
+          id="diaSemana"
+          class="form-control"
+          formControlName="diaSemana"
+          placeholder="Día de la Semana"
+          readonly
+        />
+      </div>
+      <div class="mb-3">
+        <label for="horaInicio">Hora de Inicio</label>
+        <input
+          type="time"
+          id="horaInicio"
+          class="form-control"
+          formControlName="horaInicio"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="horaFin">Hora de Fin</label>
+        <input
+          type="time"
+          id="horaFin"
+          class="form-control"
+          formControlName="horaFin"
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Crear horario</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="modalRef?.hide()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+  <!-- Modal para Editar Horario -->
+  <ng-template #modalEditarHorario let-modal>
+    <form
+      [formGroup]="editarHorarioForm"
+      (ngSubmit)="editarHorario()"
+      class="p-3"
+    >
+      <div class="mb-3">
+        <label for="fecha">Fecha</label>
+        <input
+          type="date"
+          id="fecha"
+          class="form-control"
+          formControlName="fecha"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="diaSemana">Día de la Semana</label>
+        <input
+          type="text"
+          id="diaSemana"
+          class="form-control"
+          formControlName="diaSemana"
+          placeholder="Día de la Semana"
+          readonly
+        />
+      </div>
+      <div class="mb-3">
+        <label for="horaInicio">Hora de Inicio</label>
+        <input
+          type="time"
+          id="horaInicio"
+          class="form-control"
+          formControlName="horaInicio"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="horaFin">Hora de Fin</label>
+        <input
+          type="time"
+          id="horaFin"
+          class="form-control"
+          formControlName="horaFin"
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="modalRef?.hide()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </ng-template>
+
+
+
+  <!-- Lista de horarios registrados en una tabla -->
+  <div class="row mt-3">
+    <div class="col">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Día de la Semana</th>
+            <th>Hora de Inicio</th>
+            <th>Hora de Fin</th>
+            <th>Condicion del horario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let horario of horariosFedatarios">
+            <td>{{ formatFechaCalendar(horario.fecha) }}</td>
+            <td>{{ horario.diaSemana }}</td>
+            <td>{{ horario.horaInicio }}</td>
+            <td>{{ horario.horaFin }}</td>
+            <td>{{ obtenerEstadoHorario(horario) }}</td>
+            <!-- Muestra el estado del horario -->
+            <td>
+              <!-- Botón de Editar -->
+              <button
+                class="btn btn-outline-primary me-1"
+                (click)="abrirModalEdicion(horario)"
+                *ngIf="!esHorarioPasado(horario.fecha, horario.horaFin)"
+              >
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <!-- Botón de Eliminar -->
+              <button
+                class="btn btn-outline-danger"
+                (click)="eliminarHorario(horario.id!)"
+                *ngIf="!esHorarioPasado(horario.fecha, horario.horaFin)"
+              >
+                <i class="fas fa-trash-alt"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-
-

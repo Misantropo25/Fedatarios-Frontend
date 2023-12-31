@@ -1,32 +1,70 @@
+/* Estilos base */
 .perfil-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-  
-  .foto-container {
-    flex: 0 0 auto; /* La foto no crecerá ni se encogerá, manteniendo su tamaño original */
-    margin-right: 20px; /* Ajusta el margen entre la foto y la información */
-  }
-  
-  .foto-container img {
-    width: 200px; /* Ajusta el ancho de la foto según tus preferencias */
-    height: auto; /* Mantiene la proporción original de la imagen */
-  }
-  
-  .informacion-container {
-    flex: 0 0 50%; /* La información ocupará el 50% del espacio disponible */
+  display: flex;
+  flex-direction: column; /* En dispositivos móviles, los elementos están en columna */
+  align-items: center; /* Centra los elementos en dispositivos móviles */
+  padding: 20px;
+  gap: 20px;
 }
-  
-  .informacion-container h2 {
-    font-size: 1.5em; /* Ajusta el tamaño del título según tus preferencias */
+
+.foto-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.foto-usuario {
+  border-radius: 5px; /* Bordes ligeramente redondeados */
+  width: 150px; /* Tamaño fijo en dispositivos móviles */
+  height: 150px;
+  object-fit: cover;
+  border: 3px solid #007bff;
+}
+
+.informacion-container {
+  text-align: center; /* Centrado en dispositivos móviles */
+}
+
+.info-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.info-card span {
+  font-size: 1em;
+}
+
+h2 {
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+/* Media query para pantallas medianas y grandes */
+@media (min-width: 768px) {
+  .perfil-container {
+    flex-direction: row; /* En pantallas más grandes, los elementos están en fila */
+    justify-content: center; /* Centra los elementos en el eje principal */
+    align-items: center; /* Alinea los elementos en el eje cruzado */
+    gap: 50px;
+    max-width: 1500px; /* Ancho máximo del contenedor */
+    margin: initial; /* Centrar el contenedor en la página */
   }
-  
-  .informacion-container ul {
-    list-style: none; /* Elimina los puntos de la lista */
-    padding: 0; /* Elimina el relleno predeterminado de la lista */
+
+  .foto-container,
+  .informacion-container {
+    flex: 1; /* Ambos toman la mitad del espacio disponible */
   }
-  
-  .informacion-container li {
-    margin-bottom: 10px; /* Ajusta el espacio entre los elementos de la lista */
+
+  .foto-usuario {
+    width: 40%; /* Ajusta la foto para ocupar todo el espacio del contenedor */
+    max-width: 300px; /* Tamaño máximo de la foto */
+    height: auto; /* Altura automática para mantener la proporción */
   }
+
+  .informacion-container {
+    text-align: left; /* Alineación a la izquierda en pantallas grandes */
+  }
+}

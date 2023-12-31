@@ -1,208 +1,206 @@
-<div class="container">
-  <div class="card card-outline card-primary">
-    <button
-      type="button"
-      class="btn btn-primary"
-      *ngIf="mostrarBotonTerminos"
-      data-toggle="modal"
-      data-target="#exampleModal"
-      data-whatever="@mdo"
-    >
-      <i class="fa-solid fa-scale-balanced"></i>Terminos y Condiciones
-    </button>
 
-    <div *ngIf="bandera === true">
-      <div class="card-header text-left">
-        <h3>LEGAJO</h3>
-      </div>
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div>
-            <label class="fecha">Fecha</label>
-            <label>{{ fecha }}</label>
-          </div>
-          <div>
-            <button
-              class="btn btn-success"
-              id="aumentar"
-              (click)="agregarFila()"
-            >
-              <i class="fa-solid fa-plus"></i>
-            </button>
-          </div>
-        </div>
-        <table class="table table-success table-striped" id="tabla">
-          <thead>
-            <tr>
-              <th scope="col">Tipo Documento</th>
-              <th scope="col">Archivo</th>
-            </tr>
-          </thead>
-          <tbody #cuerpo>
-            <tr *ngFor="let documento of documentos; let i = index">
-              <td>
-                <select
-                  class="form-control form-select-sm"
-                  aria-label="Small select example"
-                  [(ngModel)]="documento.tipoDocumento"
-                >
-                  <option value="1">Resolucion</option>
-                  <option value="2">Titulo</option>
-                  <option value="3">Diplomas</option>
-                  <option value="4">Maestria</option>
-                </select>
-              </td>
-              <td>
-                <div class="d-flex justify-content-between">
-                  <input
-                    class="form-control file"
-                    type="file"
-                    (change)="onFileChange($event, i)"
-                  />
-                  <button
-                    type="button"
-                    class="btn btn-warning"
-                    (click)="eliminarFila(i)"
-                  >
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </div>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  placeholder="Agregar URL"
-                  class="form-control"
-                  [(ngModel)]="documento.url"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div>
-          <p></p>
-          <label>Fedatario responsable: No seleccionado</label>
-          <p></p>
-          <label>Horario Seleccionado: No seleccionado</label>
-        </div>
-        <div class="d-flex justify-content-between">
-          <div>
-            <label>Subir documentos</label>
-          </div>
-          <div>
-            <button
-              class="btn btn-success"
-            >
-              <i class="fa-solid fa-plus"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+
+<div class="container mt-4" *ngIf="isDeclarationAccepted">
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3>Creación de Legajo</h3>
     </div>
-    <!-- Horario de los fedatarios -->
-    <div class="container">
-      <div class="card-header text-left">
-        <h3 *ngIf="bandera === true">HORARIO DE LOS FEDATARIOS</h3>
-      </div>
-      <div id="calendar"></div>
-      <div
-        *ngIf="bandera === true"
-        class="d-flex justify-content-between align-items-center mt-3"
-      >
-        <div>
+    <div class="card-body">
+      <form [formGroup]="legajoForm" (ngSubmit)="subirDocumentos()">
+        <!-- Seleccionar Fedatario -->
+        <div class="mb-3">
+          <label for="fedatario">Seleccionar Fedatario</label>
+          <select class="form-control" formControlName="fedatarioId">
+            <option value="" disabled selected>-- Elige un fedatario --</option>
+            <option *ngFor="let fed of fedatarios" [value]="fed.idusuario">
+              {{ fed.nombre }}
+            </option>
+          </select>
+        </div>
+        <!-- Seleccionar Horario -->
+        <div class="mb-3">
+          <label for="horario"
+            >Seleccionar Horario para fedatar los documentos</label
+          >
+          <select class="form-control" formControlName="horarioId">
+            <option value="" disabled selected>-- Elige un horario --</option>
+            <option *ngFor="let horario of horarios" [value]="horario.id">
+              {{
+                "Hora inicio: " +
+                  horario.horaInicio +
+                  " - Hora Fin: " +
+                  horario.horaFin +
+                  " - Fecha: " +
+                  horario.fecha
+              }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Subir Documentos -->
+        <div formArrayName="documentos">
+          <label for="documentos">Subir Documentos</label>
+          <div
+            *ngFor="let documento of documentos.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="row mb-3">
+              <!-- Columna para seleccionar tipo de documento -->
+              <div class="col">
+                <label>Selecciona el tipo de documento</label>
+                <select class="form-control" formControlName="tipoDocumentoId">
+                  <option value="" disabled selected>
+                    Selecciona el tipo de documento
+                  </option>
+                  <option
+                    *ngFor="let tipo of tiposDocumento"
+                    [value]="tipo.idtipo_documento"
+                  >
+                    {{ tipo.descripcion }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Columna para subir archivo PDF -->
+              <div class="col">
+                <label>Sube el archivo en formato .pdf</label>
+                <input
+                  type="file"
+                  formControlName="archivo"
+                  (change)="validarArchivo($event, i)"
+                  class="form-control"
+                  accept="application/pdf"
+                  placeholder="Sube un archivo PDF"
+                />
+              </div>
+
+              <!-- Columna para el botón Eliminar -->
+              <div class="col-auto">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="eliminarDocumento(i)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="text-right">
           <button
             type="button"
             class="btn btn-primary"
-            (click)="agregarEvento(nuevaFecha)"
+            (click)="agregarDocumento()"
           >
-            Agregar evento
+            Agregar Documento
+          </button>
+          <button type="submit" class="btn btn-success">
+            Subir Documentos
           </button>
         </div>
-        <div>
-          <input [(ngModel)]="nuevaFecha" type="date" class="form-control" />
-        </div>
-        <!-- Modal para agregar un evento -->
-        <form #eventoForm="ngForm">
-          <div class="modal-body">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="nombreEvento"
-              placeholder="Nombre del Evento"
-              name="nombreEvento"
-            />
-          </div>
-        </form>
-        <div>
-          <button class="btn btn-danger" (click)="borrarEvento()">
-            Borrar Evento Seleccionado
-          </button>
-        </div>
-      </div>
-      <p></p>
+      </form>
     </div>
-    <!-- Fin de horario de los fedatarios -->
+  </div>
 
-    <!-- Modal  -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <p>
-                Los documentos legales son aquellos archivos que establecen
-                derechos y obligaciones para las partes involucradas, y sirven
-                para regular y gestionar situaciones de carácter legal, tanto
-                personales como empresariales. En el contexto de las empresas,
-                los documentos legales regulan las relaciones entre la
-                organización y sus trabajadores, clientes, proveedores,
-                accionistas, entre otros. Estos documentos pueden incluir
-                contratos de trabajo, acuerdos comerciales, políticas de
-                privacidad, estatutos de la empresa, entre otros. Su objetivo es
-                establecer derechos y obligaciones claras y específicas en una
-                transacción o situación jurídica determinada, proteger los
-                intereses de la empresa y garantizar la conformidad con las
-                leyes y regulaciones aplicables
-              </p>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="validar(1, 1)"
-              data-dismiss="modal"
-              ng-hide=""
-            >
-              Aceptar
-            </button>
-          </div>
-        </div>
+  <!-- Calendario de Horarios Fedatarios -->
+  <div class="card card-outline card-primary mt-4">
+    <div class="card-header">
+      <h3>Horario del fedatario seleccionado</h3>
+    </div>
+    <div class="card-body">
+      <mwl-calendar-month-view [viewDate]="viewDate" [events]="events">
+      </mwl-calendar-month-view>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación de Declaración Jurada -->
+<div
+  class="modal fade"
+  #declarationModal
+  id="declarationModal"
+  tabindex="-1"
+  aria-labelledby="declarationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="declarationModalLabel">
+          Declaración Jurada
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Declara bajo juramento o promesa, la veracidad de la información consignada y que los
+          documentos presentados son copia fiel del original.
+          En el caso de no ser cierta la manifestación antes señalada,asume las consecuencias 
+          legales que pudieran derivarse de su actuación, conforme a la normativa vigente, no reconocerá validez alguna de
+          la documentación adjunta a los efectos para los que ha sido presentada. </p>
+        <p>¿Aceptas los términos y condiciones?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No Acepto
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="aceptarDeclaracion()"
+        >
+          Acepto
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  #successModal
+  id="successModal"
+  tabindex="-1"
+  aria-labelledby="successModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <!-- Asegura que el modal esté centrado -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">
+          Documentos subidos correctamente.
+        </h5>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="ocultarModal()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <!-- Texto y GIF centrados -->
+        <p class="bold">Documentos subidos correctamente.</p>
+        <p>ID del legajo creado: {{ idLegajoCreado }}</p>
+        <!-- Muestra el ID aquí -->
+        <img src="../../../assets/img/aprobadoLogo.avif" alt="Cargando" />
+      </div>
+      <div class="modal-footer"></div>
+    </div>
+  </div>
+</div>
+
+

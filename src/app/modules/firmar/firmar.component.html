@@ -1,128 +1,251 @@
 <div class="container">
-  <div class="card card-outline card-primary">
-    <div class="card-header text-left">
-      <h3>DOCUMENTOS A FEDATAR</h3>
+  <!-- Sección para seleccionar usuario y legajo -->
+  <div class="card card-outline card-primary mb-3">
+    <div class="card-header">
+      <h3>Seleccionar Usuario y Legajo</h3>
     </div>
     <div class="card-body">
-      <div class="d-flex justify-content-between">
-        <div>
-          <label class="fecha">Fecha</label>
-          <label>{{ fecha }}</label>
-        </div>
-        <DIV class="d-flex justify-content-center">
-          <input type="text" class="form-control" placeholder="Buscar por DNI"><button class="btn btn-success" id="aumentar"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </DIV>
+      <!-- Seleccionar Usuario -->
+      <div class="mb-3">
+        <label>Seleccionar el usuario para atender:</label>
+        <select
+          class="form-control"
+          [ngModel]="usuarioSeleccionado"
+          (ngModelChange)="usuarioSeleccionado = $event; cargarLegajos()"
+        >
+          <option value="" disabled selected>Seleccione un usuario</option>
+          <option *ngFor="let usuario of usuarios" [ngValue]="usuario.idUsuario">
+            {{ usuario.nombre }}
+            {{ usuario.apePaterno + " " + usuario.apeMaterno }}
+          </option>
+        </select>
       </div>
-      <table class="table table-striped" id="tabla">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Tipo Documento</th>
-            <th scope="col">Archivo</th>
-            <th scope="col">Visualizar</th>
-            <th scope="col">Observar</th>
-            <th scope="col">Firmar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              1
-            </td>
-            <td>
-              Resolucion
-            </td>
-            <td>
-              Resolucion.pdf
-            </td>
-            <td>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" (click)="visualizar()">
-                <i class="fa-solid fa-binoculars"></i>
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#observaciones" data-whatever="@mdo">
-                <i class="fa-solid fa-bomb"></i>
-              </button>
-            </td>
-            <td>
-              <button class="btn btn-success"><i class="fa-solid fa-signature"></i>Firmar</button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              2
-            </td>
-            <td>
-              Certificado
-            </td>
-            <td>
-              Certificado.pdf
-            </td>
-            <td>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" (click)="visualizar()">
-                <i class="fa-solid fa-binoculars"></i>
-              </button>
-            </td>
-            <td>
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#observaciones" data-whatever="@mdo" >
-              <i class="fa-solid fa-bomb"></i>
-            </button>
-            <td>
-              <button class="btn btn-success"><i class="fa-solid fa-signature"></i>Firmar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Seleccionar Legajo -->
+      <div class="mb-3">
+        <label>Seleccionar Legajo por codigo:</label>
+        <select
+          class="form-control"
+          [(ngModel)]="legajoSeleccionado"
+          (change)="cargarDocumentosPorLegajo()"
+        >
+          <option value="" disabled selected>Seleccione un legajo</option>
+          <option *ngFor="let legajo of legajos" [value]="legajo.idlegajo">
+            {{ legajo.idlegajo }}
+          </option>
+          <!-- Puedes cambiar {{ legajo.idlegajo }} por alguna otra propiedad descriptiva del legajo -->
+        </select>
+      </div>
     </div>
-</div>
-
-
-<!-- Modal de mierda -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  </div>
+  <!-- Sección de Documentos a Fedatar solo se muestra si se ha seleccionado un legajo -->
+  <div *ngIf="legajoSeleccionado" class="card card-outline card-primary">
+    <div class="card-header text-left">
+      <h3>Documentos a Fedatar</h3>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <label class="fecha grande">Fecha: {{ fechaHoraActual }}</label>
+        </div>
+        <div class="d-flex justify-content-center">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por DNI"
+            [(ngModel)]="dniBusqueda"
+          />
+          <button class="btn btn-success ml-2" (click)="buscarDocumento()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
       </div>
-      <div class="modal-body">
-        <img #imagen class="img" >
+      <!-- Envuelve tu tabla con div.table-responsive -->
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tipo Documento</th>
+              <th>Estado del documento</th> 
+              <th>Visualizar</th>
+              <th>Observar</th>
+              <th>Firmar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of documentos; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ documento.nombreTipoDocumento }}</td>
+              <td>{{ documento.estadoActual === 'Creado' ? 'Por revisar' : documento.estadoActual }}</td> <!-- Mostrar el estado ajustado -->
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="visualizar(documento)"
+                >
+                  <i class="fa-solid fa-binoculars"></i>
+                </button>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  (click)="iniciarObservacion(documento)"
+                >
+                  <i class="fa-solid fa-bomb"></i>
+                </button>
+              </td>
+              <td>
+                <button class="btn btn-success">
+                  <i class="fa-solid fa-signature"></i> Firmar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Model para las observaciones -->
-<div class="modal fade" id="observaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal para Visualizar Documento -->
+<div
+  class="modal fade"
+  id="visualizarModal"
+  tabindex="-1"
+  aria-labelledby="visualizarModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Registro de Documentos Observados</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="visualizarModalLabel">
+          Visualizar Documento
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img #imagen class="img-fluid" alt="Documento" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Observaciones -->
+<div
+  class="modal fade"
+  id="observacionesModal"
+  tabindex="-1"
+  aria-labelledby="observacionesModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="observacionesModalLabel">
+          Registrar Observaciones
+        </h5>
+        <button
+          type="button"
+          (click)="cerrarModal()"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form>
-          <select class="form-select" aria-label="Default select example">
-            <option selected>Seleccione el tipo de Observacion</option>
-            <option value="1">Imagen no corresponde</option>
-            <option value="2">Documento escaneado no es original</option>
-            <option value="3">El documento escaneado presenta sombras</option>
-          </select>
-
+          <div *ngFor="let observacion of observacionesActuales; let i = index">
+            <select
+              class="form-select"
+              [(ngModel)]="observacion.idobservaciones"
+              name="tipoObservacion{{ i }}"
+            >
+              <option value="null" disabled>
+                Seleccione el tipo de Observacion
+              </option>
+              <option
+                *ngFor="let obs of observaciones"
+                [ngValue]="obs.idobservaciones"
+              >
+                {{ obs.descripcion }}
+              </option>
+            </select>
+            <textarea
+              class="form-control mt-3"
+              rows="3"
+              [(ngModel)]="observacion.sugerencias"
+              name="detalleObservacion{{ i }}"
+              placeholder="Detalle de la observación"
+            ></textarea>
+          </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Registrar Observaciones</button>
+            <button
+              type="button"
+              class="btn btn-secondary mt-3"
+              (click)="agregarNuevaObservacion()"
+            >
+              Agregar Otra Observación
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              (click)="cerrarModal()"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="registrarObservaciones(documentoActual)"
+            >
+              Registrar Observaciones
+            </button>
           </div>
         </form>
       </div>
-
     </div>
   </div>
 </div>
 
-
+<!-- Modal para visualizar documentos -->
+<div
+  class="modal fade"
+  id="visualizarDocumentoModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="visualizarDocumentoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="visualizarDocumentoModalLabel">
+          Visualizar Documento
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="cerrarModal()"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe [src]="documentoUrl" width="100%" height="600px"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
